@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
+import Script from 'next/script';
 
 export default function Home() {
   return (
@@ -10,6 +11,11 @@ export default function Home() {
       <Head>
         <title>UNC Dashboard System</title>
         <link rel="icon" href="/favicon.ico" />
+        <script
+          type="text/javascript"
+          src="/utils/authentication.js"
+          strategy="lazyOnLoad"
+        ></script>
       </Head>
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
         <div className="bg-white rounded-2xl shadow-2xl flex w-2/3 max-w-4xl">
@@ -26,41 +32,55 @@ export default function Home() {
               </h2>
               <div className="border-2 w-10 bg-red-500 border-red-500 inline-block mb-2"></div>
               <div className="flex flex-col items-center">
-                <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
-                  <FaRegEnvelope className="text-gray-400 m-2" />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    className="bg-gray-100 outline-none text-sm flex-1"
-                  ></input>
-                </div>
+                <form id="login-form">
+                  <div>
+                    <select name="role" className="">
+                      <option value="Management" />
+                      <option value="Dean" />
+                      <option value="Faculty / Staff" />
+                    </select>
+                  </div>
 
-                <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
-                  <MdLockOutline className="text-gray-400 m-2" />
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    className="bg-gray-100 outline-none text-sm flex-1"
-                  ></input>
-                </div>
+                  <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                    <FaRegEnvelope className="text-gray-400 m-2" />
+                    <input
+                      id="login-email"
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      className="bg-gray-100 outline-none text-sm flex-1"
+                    ></input>
+                  </div>
 
-                <div className="flex justify-between w-64 mb-5">
-                  <label className="flex items-center text-xs">
-                    <input type="checkbox" name="remember" className="mr-1" />{' '}
-                    Remember Me
-                  </label>
-                  <a href="#" className="text-xs">
-                    Forgot Password?
-                  </a>
-                </div>
-                <a
-                  href="#"
-                  className="border-2 border-gray-600 rounded-full px-5 py-2 inline-block font-semibold transition ease-in-out delay-100 hover:bg-gray-600 hover:text-white duration-500"
-                >
-                  Log In
-                </a>
+                  <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                    <MdLockOutline className="text-gray-400 m-2" />
+                    <input
+                      id="login-password"
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      className="bg-gray-100 outline-none text-sm flex-1"
+                    ></input>
+                  </div>
+
+                  <div className="flex justify-between w-64 mb-5">
+                    <label className="flex items-center text-xs">
+                      <input type="checkbox" name="remember" className="mr-1" />{' '}
+                      Remember Me
+                    </label>
+
+                    <a href="#" className="text-xs">
+                      Forgot Password?
+                    </a>
+                  </div>
+                  <button
+                    type="submit"
+                    href="#"
+                    className="border-2 border-gray-600 rounded-full px-5 py-2 inline-block font-semibold transition ease-in-out delay-100 hover:bg-gray-600 hover:text-white duration-500"
+                  >
+                    Log In
+                  </button>
+                </form>
               </div>{' '}
               {/*End of Input Section*/}
             </div>
