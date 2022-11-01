@@ -1,9 +1,6 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
 import { FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
-import Script from 'next/script';
 
 export default function Home() {
   return (
@@ -33,13 +30,19 @@ export default function Home() {
               <div className="border-2 w-10 bg-red-500 border-red-500 inline-block mb-2"></div>
               <div className="flex flex-col items-center">
                 <form id="login-form">
-                  <div>
-                    <select name="role" className="">
-                      <option value="Management" />
-                      <option value="Dean" />
-                      <option value="Faculty / Staff" />
-                    </select>
-                  </div>
+                  {/*Selector*/}
+                  <select
+                    className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none 
+                  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 pee mb-3"
+                  >
+                    <option diasabled selected hidden>
+                      Select Account
+                    </option>
+                    {/*Add values!!!!*/}
+                    <option>Management</option>
+                    <option>Dean</option>
+                    <option>Faculty / Staff</option>
+                  </select>
 
                   <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
                     <FaRegEnvelope className="text-gray-400 m-2" />
