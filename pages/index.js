@@ -21,13 +21,13 @@ export default function Home() {
             {/*Login Section*/}
             <div className="text-left font-bold">
               <span className="text-gray-600">UNC</span>{' '}
-              <span className="text-red-500">DASHBOARD</span>
+              <span className="text-true-red">DASHBOARD</span>
             </div>
             <div className="py-10 m-10">
               <h2 className="text-3xl font-bold text-gray-600 mb-2">
                 Login to account
               </h2>
-              <div className="border-2 w-10 bg-red-500 border-red-500 inline-block mb-2"></div>
+              <div className="border-2 w-10 bg-true-red border-true-red inline-block mb-2"></div>
               <div className="flex flex-col items-center">
                 <form id="login-form">
                   {/*Selector*/}
@@ -89,7 +89,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-3/5 bg-red-500 text-white rounded-tr-2xl rounded-br-2xl py-36 px-12">
+          <div className="w-3/5 bg-true-red text-white rounded-tr-2xl rounded-br-2xl py-36 px-12">
             {' '}
             {/*Request Access Section*/}
             <h2 className="text-4xl font-bold mb-2">Don't Have Access?</h2>
@@ -100,7 +100,7 @@ export default function Home() {
             </p>
             <a
               href="#"
-              className="border-2 border-white rounded-full px-5 py-2 inline-block font-semibold transition ease-in-out delay-100 hover:bg-white hover:text-red-500 duration-500"
+              className="border-2 border-white rounded-full px-5 py-2 inline-block font-semibold transition ease-in-out delay-100 hover:bg-white hover:text-true-red duration-500"
             >
               Request Now
             </a>{' '}

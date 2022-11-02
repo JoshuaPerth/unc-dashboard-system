@@ -29,6 +29,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/accounts/deans.js"
+    ],
+    "/accounts/faculty": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/accounts/faculty.js"
+    ],
+    "/accounts/management": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/accounts/management.js"
     ]
   },
   "ampFirstPages": []
