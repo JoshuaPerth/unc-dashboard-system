@@ -1,6 +1,7 @@
 import Layout from '../../components/Layout';
+import { app } from '../../../firebaseConfig';
 
-const managementHomepage = () => {
+export default function managementHomepage() {
   return (
     <Layout navbarType={2}>
       <div className="ml-20 mt-5 h-full border-2 border-blue-500 bg-gray-100">
@@ -13,6 +14,4 @@ const managementHomepage = () => {
       </div>
     </Layout>
   );
-};
-
-export default managementHomepage;
+}

@@ -2,7 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/accounts/deans": "pages/accounts/deans.js",
-  "/accounts/management": "pages/accounts/management.js",
-  "/accounts/faculty": "pages/accounts/faculty.js"
+  "/": "pages/index.js",
+  "/accounts/management": "pages/accounts/management.js"
 }
