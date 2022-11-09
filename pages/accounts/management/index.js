@@ -43,7 +43,7 @@ export default function managementHomepage() {
             </div>
 
             {/*The Tutorial Cards here */}
-            <div class="w-full h-auto rounded-md shadow-lg text-center justify-center">
+            <div class="w-full h-auto border border-lines-color rounded-md shadow-md text-center justify-center">
               <a className="inline-block mt-5 text-true-red text-2xl font-bold">
                 How to use the System:
               </a>
@@ -109,6 +109,13 @@ export default function managementHomepage() {
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             November 27, 2022
                           </td>
+                          <td></td>
+                          <td>
+                            <progress id="file" value="32" max="100">
+                              {' '}
+                              32%{' '}
+                            </progress>
+                          </td>
                         </tr>
                         <tr class="bg-white border-b">
                           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -120,6 +127,13 @@ export default function managementHomepage() {
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             November 27, 2022
                           </td>
+                          <td></td>
+                          <td>
+                            <progress id="file" value="32" max="100">
+                              {' '}
+                              32%{' '}
+                            </progress>
+                          </td>
                         </tr>
                         <tr class="bg-white border-b">
                           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -130,6 +144,13 @@ export default function managementHomepage() {
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             November 27, 2022
+                          </td>
+                          <td></td>
+                          <td>
+                            <progress id="file" value="32" max="100">
+                              {' '}
+                              32%{' '}
+                            </progress>
                           </td>
                         </tr>
                       </tbody>
