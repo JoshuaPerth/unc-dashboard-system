@@ -8,6 +8,7 @@ module.exports = {
         'head-gray': '#393939',
         'true-red': '#FF2A2A',
         'darker-red': '#E6262',
+        'lines-color': '#AFAFAF',
       },
     },
   },

@@ -34,6 +34,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/accounts/management.js"
+    ],
+    "/accounts/management/reports": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/accounts/management/reports.js"
     ]
   },
   "ampFirstPages": []
