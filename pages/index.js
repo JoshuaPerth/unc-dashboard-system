@@ -5,6 +5,7 @@ import { app } from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 export default function Landing() {
   const auth = getAuth();
@@ -26,7 +27,7 @@ export default function Landing() {
     <div className="flex min-h-screen flex-col items-center justify-center py-2 bg-gray-100">
       <Head>
         <title>UNC Dashboard System</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo-favicon.png" />
         <script
           type="text/javascript"
           src="/utils/authentication.js"
@@ -39,6 +40,7 @@ export default function Landing() {
             {' '}
             {/*Login Section*/}
             <div className="text-left font-bold">
+              
               <span className="text-gray-600">UNC</span>{' '}
               <span className="text-true-red">DASHBOARD</span>
             </div>
@@ -50,7 +52,7 @@ export default function Landing() {
               <div className="flex flex-col items-center">
                 {/*Selector*/}
                 <select
-                  className="block py-2.5 px-0 w-full text-sm text-gray-500 
+                  className="block py-2.5 px-0 w-64 text-sm text-gray-500 
                     bg-transparent border-0 border-b-2 border-gray-200 appearance-none 
                   dark:text-gray-400 dark:border-gray-700 focus:outline-none 
                     focus:ring-0 focus:border-gray-200 pee mb-3"
