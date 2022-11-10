@@ -2,10 +2,25 @@ import { AiFillHome, AiFillFilePdf } from 'react-icons/ai';
 import { MdOutlineDashboard } from 'react-icons/md';
 import Image from 'next/image';
 import SideBarIcon from '../sidebar';
+import logout from './logout';
+import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
 const NavMang = () => {
+  
+  const auth = getAuth();
   const router = useRouter();
+
+auth.onAuthStateChanged(user =>{
+  if(user){
+    console.log('user logged in: ', user)
+  }else{
+    console.log('user logged out')
+  }
+})
+
+
+
   function goToReports() {
     router.push('/accounts/management/reports');
   }
@@ -13,6 +28,7 @@ const NavMang = () => {
     router.push('/accounts/management');
   }
   function Logout() {
+    logout();
     router.push('/');
   }
 

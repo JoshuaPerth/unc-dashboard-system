@@ -1,6 +1,7 @@
 import { AiFillHome, AiFillFilePdf } from 'react-icons/ai';
 import SideBarIcon from '../sidebar';
 import Image from 'next/image';
+import logout from './logout';
 import { useRouter } from 'next/router';
 
 const NavDean = () => {
@@ -12,6 +13,7 @@ const NavDean = () => {
     router.push('/accounts/deans');
   }
   function Logout() {
+    logout();
     router.push('/');
   }
   return (

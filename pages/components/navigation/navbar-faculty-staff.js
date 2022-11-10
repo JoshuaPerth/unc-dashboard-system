@@ -1,11 +1,13 @@
 import { FaTasks } from 'react-icons/Fa';
 import SideBarIcon from '../sidebar';
 import Image from 'next/image';
+import logout from './logout';
 import { useRouter } from 'next/router';
 
 const NavFS = () => {
   const router = useRouter();
   function Logout() {
+    logout();
     router.push('/');
   }
 
