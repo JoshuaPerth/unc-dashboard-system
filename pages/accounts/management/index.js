@@ -1,7 +1,20 @@
 import Layout from '../../components/Layout';
-import { app } from '../../../firebaseConfig';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { app, database } from '../../../firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function managementHomepage() {
+  const router = useRouter();
+  const databaseRef = collection(database, 'users');
+
+  useEffect(() => {
+    let token = sessionStorage.getItem('Token');
+    if (!token) {
+      router.push('/');
+    }
+  }, []);
+
   return (
     <Layout navbarType={2}>
       <div className="overflow-hidden ml-20 mr-5 mt-5 h-full">

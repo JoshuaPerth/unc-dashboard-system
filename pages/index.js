@@ -1,27 +1,47 @@
 import Head from 'next/head';
 import { FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
-import { app } from '../firebaseConfig';
+import { app, database } from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 
 export default function Landing() {
   const auth = getAuth();
   const router = useRouter();
+  const databaseRef = collection(database, 'users');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const options = ['Management', 'Dean', 'Faculty', 'Staff'];
+  const [selected, setSelected] = useState(options[0]);
+
   const LogIn = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        router.push('/accounts/management');
+      .then((response) => {
+        sessionStorage.setItem('Token', response.user.accessToken);
+
+        if (selected == 'Management') {
+          router.push('/accounts/management');
+        } else if (selected == 'Dean') {
+          router.push('/accounts/deans');
+        } else {
+          router.push('/accounts/faculty');
+        }
       })
       .catch((err) => {
         console.log(err.code);
       });
   };
+
+  useEffect(() => {
+    let token = sessionStorage.getItem('Token');
+    if (!token) {
+      router.push('/');
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2 bg-gray-100">
@@ -40,7 +60,6 @@ export default function Landing() {
             {' '}
             {/*Login Section*/}
             <div className="text-left font-bold">
-              
               <span className="text-gray-600">UNC</span>{' '}
               <span className="text-true-red">DASHBOARD</span>
             </div>
@@ -52,18 +71,18 @@ export default function Landing() {
               <div className="flex flex-col items-center">
                 {/*Selector*/}
                 <select
+                  value={selected}
+                  onChange={(e) => setSelected(e.target.value)}
                   className="block py-2.5 px-0 w-64 text-sm text-gray-500 
                     bg-transparent border-0 border-b-2 border-gray-200 appearance-none 
                   dark:text-gray-400 dark:border-gray-700 focus:outline-none 
                     focus:ring-0 focus:border-gray-200 pee mb-3"
                 >
-                  <option diasabled selected hidden>
-                    Select Account
-                  </option>
-                  {/*Add values!!!!*/}
-                  <option>Management</option>
-                  <option>Dean</option>
-                  <option>Faculty / Staff</option>
+                  {options.map((value) => (
+                    <option value={value} key={value}>
+                      {value}
+                    </option>
+                  ))}
                 </select>
 
                 <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">

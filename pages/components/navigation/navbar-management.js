@@ -7,19 +7,16 @@ import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
 const NavMang = () => {
-  
   const auth = getAuth();
   const router = useRouter();
 
-auth.onAuthStateChanged(user =>{
-  if(user){
-    console.log('user logged in: ', user)
-  }else{
-    console.log('user logged out')
-  }
-})
-
-
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      console.log('user logged in: ', user.email);
+    } else {
+      console.log('user logged out');
+    }
+  });
 
   function goToReports() {
     router.push('/accounts/management/reports');
