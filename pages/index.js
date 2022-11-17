@@ -1,16 +1,16 @@
 import Head from 'next/head';
 import { FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
-import { app, database } from '../firebaseConfig';
+import { app, database, db } from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDoc , doc} from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 export default function Landing() {
   const auth = getAuth();
   const router = useRouter();
-  const databaseRef = collection(database, 'users');
+  const databaseRef = doc(database, 'users', 'tzMkqNlclEeDhpCUUa3nOgNllvr2');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,10 +38,31 @@ export default function Landing() {
 
   useEffect(() => {
     let token = sessionStorage.getItem('Token');
+
+    if(token){
+      getData()
+    }
+    
     if (!token) {
       router.push('/');
     }
   }, []);
+
+  const getData = async () =>{
+
+    try{
+      const docSnap = await getDoc(databaseRef);
+      if(docSnap.exists()) {
+        console.log(docSnap.data().account_type);
+      }else {
+        console.log("Document does not exist")
+      }
+
+    }catch(e){
+      console.log(e);
+    }
+
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2 bg-gray-100">
