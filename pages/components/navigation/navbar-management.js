@@ -10,13 +10,19 @@ const NavMang = () => {
   const auth = getAuth();
   const router = useRouter();
 
-  auth.onAuthStateChanged((user) => {
+  /*
+   auth.onAuthStateChanged((user) => {
     if (user) {
+      console.log(user.uid)
       console.log('user logged in: ', user.email);
     } else {
       console.log('user logged out');
     }
   });
+  
+  */
+
+ 
 
   function goToReports() {
     router.push('/accounts/management/reports');

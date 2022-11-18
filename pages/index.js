@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
 import { app, database, db } from '../firebaseConfig';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, getDoc , doc} from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -10,7 +10,9 @@ import { useRouter } from 'next/router';
 export default function Landing() {
   const auth = getAuth();
   const router = useRouter();
-  const databaseRef = doc(database, 'users', 'tzMkqNlclEeDhpCUUa3nOgNllvr2');
+  var firebaseDocument = ' ';
+  var accountType = '';
+  var databaseRef = '';  
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,10 +20,42 @@ export default function Landing() {
   const options = ['Management', 'Dean', 'Faculty', 'Staff'];
   const [selected, setSelected] = useState(options[0]);
 
-  const LogIn = () => {
+  async function LogIn(){
+
+    
+
     signInWithEmailAndPassword(auth, email, password)
       .then((response) => {
         sessionStorage.setItem('Token', response.user.accessToken);
+
+
+        auth.onAuthStateChanged((user) => {
+          if (user) {
+            firebaseDocument = user.uid
+            databaseRef = doc(database, 'users', firebaseDocument);
+           
+
+            console.log('user logged in: ', user.email);
+            console.log('user type in: ', accountType);
+
+            if(accountType == 'management'){
+              console.log('true!')
+            }else{
+              console.log('False')
+            }
+
+          } else {
+            console.log('user logged out');
+          }
+        });
+
+
+        accountType = await getData();
+
+        
+
+
+      
 
         if (selected == 'Management') {
           router.push('/accounts/management');
@@ -36,13 +70,12 @@ export default function Landing() {
       });
   };
 
+  
+  
+
+
   useEffect(() => {
     let token = sessionStorage.getItem('Token');
-
-    if(token){
-      getData()
-    }
-    
     if (!token) {
       router.push('/');
     }
@@ -53,7 +86,7 @@ export default function Landing() {
     try{
       const docSnap = await getDoc(databaseRef);
       if(docSnap.exists()) {
-        console.log(docSnap.data().account_type);
+        return docSnap.data().account_type;
       }else {
         console.log("Document does not exist")
       }
