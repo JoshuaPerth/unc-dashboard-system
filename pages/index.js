@@ -2,17 +2,22 @@ import Head from 'next/head';
 import { FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
 import { app, database, db } from '../firebaseConfig';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, getDoc , doc} from 'firebase/firestore';
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { getDoc, doc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { Result } from 'postcss';
 
 export default function Landing() {
   const auth = getAuth();
   const router = useRouter();
   var firebaseDocument = ' ';
   var accountType = '';
-  var databaseRef = '';  
+  var databaseRef = '';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,59 +25,41 @@ export default function Landing() {
   const options = ['Management', 'Dean', 'Faculty', 'Staff'];
   const [selected, setSelected] = useState(options[0]);
 
-  async function LogIn(){
-
-    
-
+  function LogIn() {
     signInWithEmailAndPassword(auth, email, password)
       .then((response) => {
         sessionStorage.setItem('Token', response.user.accessToken);
 
-
         auth.onAuthStateChanged((user) => {
           if (user) {
-            firebaseDocument = user.uid
+            firebaseDocument = user.uid;
             databaseRef = doc(database, 'users', firebaseDocument);
-           
-
-            console.log('user logged in: ', user.email);
-            console.log('user type in: ', accountType);
-
-            if(accountType == 'management'){
-              console.log('true!')
-            }else{
-              console.log('False')
-            }
-
+            getData();
           } else {
             console.log('user logged out');
           }
         });
-
-
-        accountType = await getData();
-
-        
-
-
-      
-
-        if (selected == 'Management') {
-          router.push('/accounts/management');
-        } else if (selected == 'Dean') {
-          router.push('/accounts/deans');
-        } else {
-          router.push('/accounts/faculty');
-        }
       })
       .catch((err) => {
+        alert('LogIn Error, please check your credentials');
         console.log(err.code);
       });
+  }
+
+  const pushToPage = (accountType) => {
+    console.log(selected);
+
+    if (selected == 'Management' && accountType == 'management') {
+      router.push('/accounts/management');
+    } else if (selected == 'Dean' && accountType == 'dean') {
+      router.push('/accounts/deans');
+    } else if (selected == 'Faculty' && accountType == 'faculty') {
+      router.push('/accounts/faculty');
+    } else {
+      router.push('/');
+      alert('LogIn Error, please check your credentials');
+    }
   };
-
-  
-  
-
 
   useEffect(() => {
     let token = sessionStorage.getItem('Token');
@@ -81,21 +68,19 @@ export default function Landing() {
     }
   }, []);
 
-  const getData = async () =>{
-
-    try{
+  const getData = async () => {
+    try {
       const docSnap = await getDoc(databaseRef);
-      if(docSnap.exists()) {
-        return docSnap.data().account_type;
-      }else {
-        console.log("Document does not exist")
+      if (docSnap.exists()) {
+        accountType = docSnap.data().account_type;
+        pushToPage(accountType);
+      } else {
+        console.log('Document does not exist');
       }
-
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
-
-  }
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2 bg-gray-100">
