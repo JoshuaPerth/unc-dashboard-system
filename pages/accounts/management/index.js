@@ -83,13 +83,13 @@ export default function managementHomepage() {
                             scope="col"
                             class="text-sm font-medium text-sub-gray px-6 py-4 text-left"
                           >
-                            Project Title
+                            Priority
                           </th>
                           <th
                             scope="col"
                             class="text-sm font-medium text-sub-gray px-6 py-4 text-left"
                           >
-                            Status
+                            Quarter
                           </th>
                           <th
                             scope="col"
@@ -117,7 +117,7 @@ export default function managementHomepage() {
                             Employment Rate
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            On going
+                            Quarter 1
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             November 27, 2022
@@ -135,7 +135,7 @@ export default function managementHomepage() {
                             Employment Rate
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            Completed
+                            Quarter 2
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             November 27, 2022
@@ -153,7 +153,7 @@ export default function managementHomepage() {
                             Employment Rate
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            On going
+                            Quarter 1
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             November 27, 2022
