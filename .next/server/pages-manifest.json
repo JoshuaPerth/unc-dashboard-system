@@ -2,7 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/accounts/management": "pages/accounts/management.js",
-  "/accounts/management/reports": "pages/accounts/management/reports.js",
+  "/accounts/management/quarter": "pages/accounts/management/quarter.js",
   "/accounts/management/yearly-plan": "pages/accounts/management/yearly-plan.js"
 }

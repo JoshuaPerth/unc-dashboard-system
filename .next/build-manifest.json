@@ -25,15 +25,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/accounts/management": [
+    "/accounts/management/quarter": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/accounts/management.js"
-    ],
-    "/accounts/management/reports": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/accounts/management/reports.js"
+      "static/chunks/pages/accounts/management/quarter.js"
     ],
     "/accounts/management/yearly-plan": [
       "static/chunks/webpack.js",

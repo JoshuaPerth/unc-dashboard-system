@@ -1,14 +1,48 @@
 import Layout from '../../components/Layout';
-import { useState } from 'react';
-import { app } from '../../../firebaseConfig';
+import React, { useState, useEffect } from 'react';
+import { app, database } from '../../../firebaseConfig';
+import { collection, addDoc, onSnapshot } from 'firebase/firestore';
 
 export default function yearly() {
   const [numPlans, setNumPlans] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const databaseRef = collection(database, 'yearPlans');
+  const [years, setYears] = useState([]);
 
-  const handleAddPlan = () => {
-    setNumPlans(numPlans + 1);
-    setShowConfirmation(false); // hide modal after handling add plan
+  useEffect(() => {
+    onSnapshot(databaseRef, (snapshot) => {
+      const yearTitles = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return data['year-title'];
+      });
+      yearTitles.sort((a, b) => a - b); // sort year titles in descending order
+      setYears(yearTitles);
+      setNumPlans(yearTitles.length);
+    });
+  }, []);
+
+  const handleAddPlan = async () => {
+    try {
+      // Get the last year title and increment it by 1
+      const newYear =
+        years.length > 0 ? Number(years[years.length - 1]) + 1 : 1;
+
+      // Add the new year plan document to the collection
+      const docRef = await addDoc(databaseRef, {
+        'year-title': newYear,
+      });
+
+      // Update the years state with the new year at the end
+      setYears([...years, newYear]);
+
+      // Update the numPlans state with the new length of the years array
+      setNumPlans(years.length + 1);
+
+      // Hide the confirmation modal
+      setShowConfirmation(false);
+    } catch (error) {
+      console.error('Error adding year plan:', error);
+    }
   };
 
   const handleCancel = () => {
@@ -39,8 +73,8 @@ export default function yearly() {
     </div>
   );
 
-  const yearPlans = Array.from({ length: numPlans }, (_, i) => (
-    <div className="container mx-auto" key={i}>
+  const yearPlans = years.map((yearTitle, index) => (
+    <div className="container mx-auto" key={index}>
       <details class="bg-white shadow rounded group mb-4 pb-2">
         <summary
           class="list-none flex flex-wrap items-center cursor-pointer
@@ -49,7 +83,7 @@ export default function yearly() {
           "
         >
           <h3 class="flex flex-1 p-4 font-semibold text-lg">
-            {2022 + i} Year Plan
+            {yearTitle} Year Plan
           </h3>
           <div class="flex w-10 items-center justify-center">
             <div
@@ -75,14 +109,37 @@ export default function yearly() {
         <div className="m-3 border-t"></div>
 
         <div className="grid place-items-center">
-          {yearPlans}
+          {years.map((year, index) => (
+            <div className="container mx-auto" key={year}>
+              <details className="bg-white shadow rounded group mb-4 pb-2">
+                <summary
+                  className="list-none flex flex-wrap items-center cursor-pointer
+                    focus-visible:outline-none focus-visible:ring focus-visible:ring-pink-500
+                    rounded group-open:rounded-b-none group-open:z-[1] relative
+                  "
+                >
+                  <h3 className="flex flex-1 p-4 font-semibold text-lg">
+                    {year} Year Plan
+                  </h3>
+                  <div className="flex w-10 items-center justify-center">
+                    <div
+                      className="border-8 border-transparent border-l-gray-600 ml-2
+                        group-open:rotate-90 transition-transform origin-left
+                      "
+                    ></div>
+                  </div>
+                </summary>
+                {planContent}
+              </details>
+            </div>
+          ))}
           <button
             type="button"
             onClick={handleShowConfirmation}
             className="mt-3 text-white bg-sub-gray transition ease-in-out 
-          delay-100 hover:bg-head-gray focus:ring-4 focus:ring-blue-300 
-          font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 
-          dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              delay-100 hover:bg-head-gray focus:ring-4 focus:ring-blue-300 
+              font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 
+              dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           >
             Add Year Plan
           </button>
