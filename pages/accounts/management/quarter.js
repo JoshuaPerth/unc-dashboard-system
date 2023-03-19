@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
-import { TagsInput } from 'react-tag-input-component';
+import React, { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { AiFillCloseSquare } from 'react-icons/ai';
 import Layout from '../../components/Layout';
 import { app, database } from '../../../firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import Select from 'react-select';
 
 export default function quarter() {
   const databaseRef = collection(database, 'priorities');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDesc] = useState('');
-  const [selected, setSelected] = useState([]);
+  const [selectedDepts, setSelectedDepts] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
-  const [isFocused, setIsFocused] = useState(false);
-  const departmentChoices = [
-    'Computer Studies',
-    'Engineering & Architecture',
-    'Criminal Justice Education',
+
+  const options = [
+    { value: 'CS', label: 'Computer Studies' },
+    { value: 'BA', label: 'Business & Accountancy' },
+    { value: 'AS', label: 'Arts & Sciences' },
+    { value: 'TE', label: 'Teacher Education' },
+    { value: 'EA', label: 'Engineering & Architecture' },
+    { value: 'CJ', label: 'Criminal Justice' },
+    { value: 'N', label: 'Nursing' },
+    { value: 'L', label: 'Law' },
   ];
 
   const addData = () => {
@@ -27,7 +32,7 @@ export default function quarter() {
       description: description,
       dueDate: startDate,
       progress: 0,
-      departments: selected,
+      departments: selectedDepts.map((option) => option.value),
     })
       .then(() => {
         alert('Priority Sent!');
@@ -40,6 +45,15 @@ export default function quarter() {
       });
   };
 
+  const handleChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      selected.concat(value);
+    } else {
+      selected.filter((e) => e !== value);
+    }
+  };
+
   return (
     <Layout navbarType={2}>
       <div className="ml-20 mr-5 mt-5 h-full ">
@@ -48,7 +62,6 @@ export default function quarter() {
           Priorities for Month start - month end<br></br>
         </a>
         <div className="m-3 border-t"></div>
-        
 
         <div>
           <p className="font-semibold text-2xl">Priority #</p>
@@ -80,7 +93,7 @@ export default function quarter() {
             id="overlay"
             className="bg-black bg-opacity-50 absolute inset-0 flex justify-center items-center"
           >
-            <div className="bg-white max-w-sm py-2 px-3 rounded shadow-xl">
+            <div className="bg-white w-96 py-2 px-4 rounded shadow-xl">
               <div className="flex justify-between items-center">
                 <h4 className="text-lg font-bold">Priority Form </h4>
                 <AiFillCloseSquare
@@ -91,7 +104,7 @@ export default function quarter() {
               <div className="mt-2">
                 <label>Title: </label>
                 <input
-                  className="border rounded"
+                  className="placeholder:italic border rounded px-2"
                   type="text"
                   placeholder="Priority title"
                   value={title}
@@ -99,10 +112,10 @@ export default function quarter() {
                 />
               </div>
 
-              <div className="mt-2">
+              <div className="mt-2 w-full">
                 <label>Description: </label>
-                <input
-                  className="border rounded"
+                <textarea
+                  className="placeholder:italic rows-4 border rounded px-2 w-full"
                   type="text"
                   placeholder="Description"
                   value={description}
@@ -121,33 +134,15 @@ export default function quarter() {
                 </div>
               </div>
 
-              <div>
-                <div>
-                  <h1 className="mt-3">Deparments: </h1>
-                  <pre>{JSON.stringify(selected)}</pre>
-                  <TagsInput
-                    value={selected}
-                    onChange={setSelected}
-                    name="tags"
-                    placeHolder="tags"
-                    focus={() => setIsFocused(true)}
-                  />
-                </div>
-
-                {isFocused && (
-                  <div className="shadow-lg p-2">
-                    {departmentChoices.map((suggestion, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="p-2 hover:bg-gray-200 cursor-pointer"
-                        >
-                          {suggestion}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+              <div className="mt-3 flex items-center w-full">
+                <label>Select Departments: </label>
+                <Select
+                  className="p-2 flex-grow"
+                  isMulti
+                  name="departments"
+                  options={options}
+                  onChange={setSelectedDepts}
+                />
               </div>
 
               <div className="mt-3 flex justify-end space-x-3">

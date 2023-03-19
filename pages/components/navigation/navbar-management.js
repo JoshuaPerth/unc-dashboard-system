@@ -1,4 +1,4 @@
-import { AiFillHome, AiFillFilePdf } from 'react-icons/ai';
+import { AiFillHome, AiFillFilePdf, AiFillCalendar } from 'react-icons/ai';
 import { MdOutlineDashboard } from 'react-icons/md';
 import Image from 'next/image';
 import SideBarIcon from '../sidebar';
@@ -22,10 +22,11 @@ const NavMang = () => {
   
   */
 
- 
-
   function goToReports() {
     router.push('/accounts/management/reports');
+  }
+  function goToAgenda() {
+    router.push('/accounts/management/yearly-plan');
   }
   function goToHome() {
     router.push('/accounts/management');
@@ -43,6 +44,14 @@ const NavMang = () => {
         <SideBarIcon icon={<AiFillHome size="30" />} text="Home 🏠" />
       </button>
 
+      <button onClick={goToAgenda}>
+        <SideBarIcon
+          href="/accounts/management/reports"
+          icon={<AiFillCalendar size="30" />}
+          text="Agenda 📅"
+        />
+      </button>
+
       <button onClick={goToReports}>
         <SideBarIcon
           href="/accounts/management/reports"
@@ -50,6 +59,7 @@ const NavMang = () => {
           text="Reports 📁"
         />
       </button>
+
       <button onClick={Logout}>
         <a className="inline-block absolute bottom-5 right-0 left-0 text-xs text-center">
           Logout
