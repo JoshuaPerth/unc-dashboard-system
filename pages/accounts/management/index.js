@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { app, database } from '../../../firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
+import withAuth from './withAuth';
 
-export default function managementHomepage() {
+function managementHomepage() {
   const router = useRouter();
   const databaseRef = collection(database, 'users');
 
@@ -178,3 +179,4 @@ export default function managementHomepage() {
     </Layout>
   );
 }
+export default withAuth(managementHomepage);

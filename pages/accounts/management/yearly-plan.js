@@ -1,7 +1,17 @@
 import Layout from '../../components/Layout';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { app, database } from '../../../firebaseConfig';
-import { collection, addDoc, onSnapshot } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  limit,
+  doc,
+} from 'firebase/firestore';
 
 export default function yearly() {
   const [numPlans, setNumPlans] = useState(0);
@@ -15,13 +25,13 @@ export default function yearly() {
         const data = doc.data();
         return data['year-title'];
       });
-      yearTitles.sort((a, b) => a - b); // sort year titles in descending order
+      yearTitles.sort((a, b) => a.toString() - b.toString()); // sort year titles in descending order
       setYears(yearTitles);
       setNumPlans(yearTitles.length);
     });
   }, []);
 
-  const handleAddPlan = async () => {
+  const handleAddPlan = useCallback(async () => {
     try {
       // Get the last year title and increment it by 1
       const newYear =
@@ -32,18 +42,34 @@ export default function yearly() {
         'year-title': newYear,
       });
 
+      // Add subcollections to the new year plan document
+      const subcollections = [
+        'priorities-q1',
+        'priorities-q2',
+        'priorities-q3',
+        'priorities-q4',
+      ];
+      subcollections.forEach(async (subcollection) => {
+        await addDoc(
+          collection(doc(database, 'yearPlans', docRef.id), subcollection),
+          {}
+        );
+      });
+
       // Update the years state with the new year at the end
       setYears([...years, newYear]);
 
       // Update the numPlans state with the new length of the years array
       setNumPlans(years.length + 1);
 
-      // Hide the confirmation modal
-      setShowConfirmation(false);
+      // Hide the confirmation modal after a short delay
+      setTimeout(() => {
+        setShowConfirmation(false);
+      }, 10);
     } catch (error) {
       console.error('Error adding year plan:', error);
     }
-  };
+  }, [setShowConfirmation, years, databaseRef]);
 
   const handleCancel = () => {
     setShowConfirmation(false); // hide modal on cancel
@@ -53,26 +79,53 @@ export default function yearly() {
     setShowConfirmation(true); // show modal on button click
   };
 
+  const deleteMostRecentPlan = async () => {
+    try {
+      const querySnapshot = await getDocs(
+        query(
+          collection(database, 'yearPlans'),
+          orderBy('year-title', 'desc'),
+          limit(1)
+        )
+      );
+      const mostRecentPlan = querySnapshot.docs[0];
+      await deleteDoc(doc(database, 'yearPlans', mostRecentPlan.id));
+      setYears(
+        years.filter((year) => year !== mostRecentPlan.data()['year-title'])
+      );
+      setNumPlans(numPlans - 1);
+    } catch (error) {
+      console.error('Error deleting most recent year plan:', error);
+    }
+  };
+
   const planContent = (
     <div className="mx-3 block text-gray-600 italic">
-      <p class="m-2 cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
-        Quarter 1
-      </p>
+      <a href="quarter">
+        <p class="m-2 cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
+          Quarter 1
+        </p>
+      </a>
       <div className="mx-3 border-t"></div>
-      <p class="m-2  cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
-        Quarter 2
-      </p>
-      <div className="mx-3 border-t"></div>
-      <p class="m-2 cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
-        Quarter 3
-      </p>
-      <div className="mx-3 border-t"></div>
-      <p class="m-2 cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
-        Quarter 4
-      </p>
+      <a href="quarter">
+        <p class="m-2  cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
+          Quarter 2
+        </p>
+      </a>
+      <a href="quarter">
+        <div className="mx-3 border-t"></div>
+        <p class="m-2 cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
+          Quarter 3
+        </p>
+      </a>
+      <a href="quarter">
+        <div className="mx-3 border-t"></div>
+        <p class="m-2 cursor-pointer transition delay-100 duration-300 ease-in-out hover:text-true-red">
+          Quarter 4
+        </p>
+      </a>
     </div>
   );
-
   const yearPlans = years.map((yearTitle, index) => (
     <div className="container mx-auto" key={index}>
       <details class="bg-white shadow rounded group mb-4 pb-2">
@@ -133,16 +186,28 @@ export default function yearly() {
               </details>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={handleShowConfirmation}
-            className="mt-3 text-white bg-sub-gray transition ease-in-out 
-              delay-100 hover:bg-head-gray focus:ring-4 focus:ring-blue-300 
-              font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 
-              dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            Add Year Plan
-          </button>
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={handleShowConfirmation}
+              className="mt-3 text-white bg-sub-gray transition ease-in-out 
+      delay-100 hover:bg-head-gray focus:ring-4 focus:ring-blue-300 
+      font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 
+      dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              Add Year Plan
+            </button>
+            <button
+              onClick={deleteMostRecentPlan}
+              className="mt-3 text-white bg-red-600 transition ease-in-out 
+      delay-100 hover:bg-red-700 focus:ring-4 focus:ring-red-300 
+      font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-red-800 
+      dark:hover:bg-red-900 focus:outline-none dark:focus:ring-red-800"
+            >
+              Delete Most Recent Plan
+            </button>
+          </div>
+
           {showConfirmation && (
             <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center">
               <div className="absolute w-full h-full bg-gray-900 opacity-50"></div>
